@@ -35,21 +35,26 @@ class HomeController extends Controller
             //Formatação dos dados para o frontend
             $columns = [];
 
-            foreach (TaskStatusEnum::values() as $status) {
+            foreach (TaskStatusEnum::values() as $index => $status) {
                 $tasks = $kanban->tasks
                     ->filter(fn ($task) => $task->status === $status)
-                    ->makeHidden(['created_at', 'updated_at']);
+                    ->makeHidden(['created_at', 'updated_at'])
+                    ->values();
 
-                $columns[$status] = $tasks;
+                $columns[] = [
+                    'id' => $index + 1,
+                    'title' => $status,
+                    'cards' => $tasks
+                ];
             }
 
-
-            return $columns;
 
             return response([
                 'success' => true,
                 'message' => 'kanban carregado com sucesso',
-                'data' => $kanban
+                'data' => [
+                    'columns' => $columns
+                ]
             ]);
             
         } catch (\Throwable $th) {
