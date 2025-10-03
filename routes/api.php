@@ -13,6 +13,8 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout']);
+
     Route::apiResource('/tasks', TaskController::class);  
 
     Route::get('/home', [HomeController::class, 'index']);

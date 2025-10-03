@@ -57,7 +57,18 @@ class AuthController extends Controller
         }
     }
 
-    function me ()
+    function logout(Request $request)
+    {
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response([
+            'success' => true,
+            'message' => 'Deslogado com sucesso',
+        ]);
+    }
+
+    function me()
     {
         $user = Auth::user();
 
