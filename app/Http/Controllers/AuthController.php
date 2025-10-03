@@ -43,6 +43,8 @@ class AuthController extends Controller
             $user = User::create($validatedData);
 
             $kanban = Kanban::create(['user_id' => $user->id]);
+
+            Auth::login($user);
             
             return response([
                 'success' => true,
