@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
 
         for ($i=0; $i < $QUANTITY_OF_TASKS; $i++) { 
             Task::factory()->create([
+                'order' => $i + 1,
                 'kanban_id' => $kanban->id
             ]);
         }

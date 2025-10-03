@@ -15,7 +15,8 @@ class Task extends Model
         'description',
         'status',
         'completed_at',
-        'kanban_id'
+        'kanban_id',
+        'order'
     ];
 
     protected function casts(): array

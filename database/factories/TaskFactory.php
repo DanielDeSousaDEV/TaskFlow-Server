@@ -24,6 +24,7 @@ class TaskFactory extends Factory
             'completed_at' => fake()->boolean()
                 ? fake()->dateTimeBetween('-1 month', 'now')
                 : null,
+            'order' => null,
             'kanban_id' => null
         ];
     }

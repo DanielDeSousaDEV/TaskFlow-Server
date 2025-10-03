@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('status');
             $table->dateTime('completed_at')
                 ->nullable();
+            $table->unsignedInteger('order')
+                ->nullable();
             
             $table->foreignIdFor(Kanban::class);
             $table->timestamps();

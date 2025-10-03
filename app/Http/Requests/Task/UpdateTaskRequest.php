@@ -28,6 +28,7 @@ class UpdateTaskRequest extends FormRequest
             'description' => ['sometimes', 'string', 'min:8'],
             'status' => ['sometimes', 'string', Rule::enum(TaskStatusEnum::class)],
             'completed_at' => ['sometimes', 'nullable', 'date'],
+            'order' => ['sometimes', 'integer', 'min:0'],
         ];
     }
     
@@ -44,6 +45,9 @@ class UpdateTaskRequest extends FormRequest
             'status.enum'     => 'O status informado é inválido.',
 
             'completed_at.date' => 'O campo "concluído em" deve ser uma data válida.',
+
+            'order.integer'   => 'A ordem deve ser um número.',
+            'order.min'      => 'A ordem deve ser no mínimo :min.',
         ];
     }
 }
