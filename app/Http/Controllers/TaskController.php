@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Task\MoveTaskRequest;
 use App\Http\Requests\Task\StoreTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Models\Kanban;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
@@ -234,4 +236,74 @@ class TaskController extends Controller
             ], 500);
         }
     }
+
+    function move(MoveTaskRequest $request, $id)
+    {
+        try {
+            $task = Task::find($id);
+
+            if (!$task) {
+                return response([
+                    'success' => false,
+                    'message' => 'Não foi possível achar a tarefa',
+                ], 404);
+            }
+
+            $validatedData = $request->validated();
+
+            $user = Auth::user();
+
+            if (!$user) {
+                return response([
+                    'success' => false,
+                    'message' => 'Usuário não está logado',
+                ], 401);
+            }
+
+            $user->load('kanban');
+            $userKanbanId = $user->kanban->id ?? 0;
+            $taskKanbanId = $task->kanban()->first()->id;
+
+            if ($userKanbanId !== $taskKanbanId) {
+                return response([
+                    'success' => false,
+                    'message' => 'Esta task não pertece a esse uauário',
+                ], 403);
+            }
+
+            DB::beginTransaction();
+
+            if ($task->order < $validatedData['order']) {
+                // Task está descendo → decrementa o order das tasks entre a posição antiga e nova
+                Task::where('kanban_id', $task->kanban_id)
+                    ->where('status', $task->status)
+                    ->whereBetween('order', [$task->order + 1, $validatedData['order']])
+                    ->decrement('order');
+            } elseif ($task->order > $validatedData['order']) {
+                // Task está subindo → incrementa o order das tasks entre a posição nova e antiga
+                Task::where('kanban_id', $task->kanban_id)
+                    ->where('status', $task->status)
+                    ->whereBetween('order', [$validatedData['order'], $task->order - 1])
+                    ->increment('order');
+            }
+
+            $task->update($validatedData);
+
+            DB::commit();
+
+            return response([
+                'success' => true,
+                'message' => 'Tarefas atualizada com sucesso',
+                'data' => $task
+            ]);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return response([
+                'success' => false,
+                'message' => 'Erro desconhecido',
+            ], 500);
+        }
+    }   
 }

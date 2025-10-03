@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
 
     Route::apiResource('/tasks', TaskController::class);  
+    Route::patch('tasks/{id}/move', [TaskController::class, 'move']);
 
     Route::get('/home', [HomeController::class, 'index']);
 });
