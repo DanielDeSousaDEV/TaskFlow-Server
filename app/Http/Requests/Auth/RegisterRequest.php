@@ -23,7 +23,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:2'],
-            'email' => ['required', 'string', 'email', 'min:2'],
+            'email' => ['required', 'string', 'email', 'min:2', 'unique:users,email'],
             'password' => ['required', 'string', 'min:2'],
         ];
     }
@@ -39,6 +39,7 @@ class RegisterRequest extends FormRequest
             'email.string'   => 'O e-mail deve ser um texto.',
             'email.email'    => 'Digite um e-mail válido.',
             'email.min'      => 'O e-mail deve ter pelo menos :min caracteres.',
+            'email.unique'   => 'Este e-mail já foi cadastrado no sistema.',
 
             'password.required' => 'O campo senha é obrigatório.',
             'password.string'   => 'A senha deve ser um texto.',
