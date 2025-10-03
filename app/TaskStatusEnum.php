@@ -13,4 +13,13 @@ enum TaskStatusEnum: string
     {
         return array_map(fn($case) => $case->value, self::cases());
     }
+
+    public function label(): string
+    {
+        return match($this) {
+            self::TODO => 'A Fazer',
+            self::WORKING => 'Em Progresso',
+            self::COMPLETED => 'Concluído',
+        };
+    }
 }
