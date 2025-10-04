@@ -61,7 +61,6 @@ class HomeController extends Controller
         } catch (\Throwable $th) {
             return response([
                 'success' => false,
-                'e' => $th->getMessage(),
                 'message' => 'Erro desconhecido',
             ], 500);
         }

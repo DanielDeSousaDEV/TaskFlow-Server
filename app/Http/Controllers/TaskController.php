@@ -130,7 +130,6 @@ class TaskController extends Controller
         } catch (\Throwable $th) {
             return response([
                 'success' => false,
-                'e' => $th,
                 'message' => 'Erro desconhecido',
             ], 500);
         }
@@ -182,7 +181,6 @@ class TaskController extends Controller
         } catch (\Throwable $th) {
             return response([
                 'success' => false,
-                'e' => $th->getFile(),
                 'message' => 'Erro desconhecido',
             ], 500);
         }
@@ -231,7 +229,6 @@ class TaskController extends Controller
         } catch (\Throwable $th) {
             return response([
                 'success' => false,
-                'e' => $th->getMessage(),
                 'message' => 'Erro desconhecido',
             ], 500);
         }

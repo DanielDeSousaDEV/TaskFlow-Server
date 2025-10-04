@@ -31,7 +31,6 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Login feito com sucesso',
             'data' => Auth::user(),
-            'tok' => Auth::user()->createToken('api-token')->plainTextToken
         ]);
     }
 
@@ -44,7 +43,7 @@ class AuthController extends Controller
 
             $kanban = Kanban::create(['user_id' => $user->id]);
 
-            Auth::login($user);
+            Auth::login($user, true);
             
             return response([
                 'success' => true,
