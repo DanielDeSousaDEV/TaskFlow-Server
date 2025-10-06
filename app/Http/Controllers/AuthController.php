@@ -63,6 +63,8 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        auth('web')->logout();
+
         return response([
             'success' => true,
             'message' => 'Deslogado com sucesso',
